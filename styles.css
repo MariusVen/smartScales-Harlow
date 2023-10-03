@@ -1,0 +1,148 @@
+#weightDisplay {
+  font-size: 5vh;
+  text-align: center;
+}
+
+/* Reset default margin and padding */
+body,
+h1,
+h2,
+h3,
+p,
+ul,
+li {
+  margin: 0;
+  padding: 0;
+}
+
+/* Apply a background color and font family */
+body {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  background-color: #f4f4f4;
+  color: #333;
+}
+
+/* Header styles */
+.header {
+  background-color: #000;
+  color: #fff;
+  padding: 10px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.navbar ul {
+  margin-left: 15px;
+  list-style: none;
+  display: flex;
+  gap: 20px;
+}
+
+.navbar li {
+  font-size: 18px;
+}
+
+.navbar a {
+  text-decoration: none;
+  color: #fff;
+  transition: color 0.2s;
+}
+
+.navbar a:hover {
+  color: #999;
+}
+
+.logo img {
+  width: 40px;
+  height: auto;
+}
+
+/* Hero section styles */
+.hero {
+  background-image: url("hero-background.jpg");
+  background-size: cover;
+  background-position: center;
+  background-color: #000;
+  color: #fff;
+  text-align: center;
+  padding: 40px 0;
+}
+
+.hero-content h1 {
+  font-size: 48px;
+  margin-bottom: 20px;
+}
+
+.hero-content p {
+  font-size: 24px;
+  margin-bottom: 30px;
+}
+
+.cta-button {
+  display: inline-block;
+  padding: 15px 40px;
+  font-size: 24px;
+  background-color: #0071e3;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 30px;
+  transition: background-color 0.2s;
+}
+
+.cta-button:hover {
+  background-color: #0054aa;
+}
+
+/* Featured products section styles */
+.featured-products {
+  padding: 40px;
+  text-align: center;
+}
+
+.featured-products h2 {
+  font-size: 36px;
+  margin-bottom: 40px;
+}
+
+.product-card {
+  background-color: #fff;
+  padding: 50px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  margin-bottom: 50px;
+}
+
+.product-card img {
+  max-width: 100%;
+  height: auto;
+  margin-bottom: 20px;
+}
+
+.product-card h3 {
+  display: inline; /* or inline-block depending on your desired layout */
+
+  font-size: 90px;
+  margin-bottom: 10px;
+}
+
+.product-card p {
+  font-size: 90px;
+  margin-bottom: 20px;
+}
+
+.product-card span {
+  font-size: 80px;
+  display: inline; /* or inline-block depending on your desired layout */
+  margin-left: 10px; /* Remove default margin */
+  padding: 0; /* Remove default padding */
+}
+
+/* Footer styles */
+.footer {
+  background-color: #141414;
+  color: #fff;
+  text-align: center;
+  padding: 20px 0;
+}
