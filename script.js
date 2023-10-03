@@ -16,7 +16,7 @@ async function detectCableDisconnection() {
 
 function handleCableDisconnection() {
   // Display a message to the user
-  output.textContent = "Cable disconnected. Please reconnect.\n";
+  output.textContent = "Cable disconnected.\n";
 
   // Clear any data or buffers
   // Close the port if it's still open
