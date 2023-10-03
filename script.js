@@ -81,4 +81,27 @@ async function readLoop() {
   }
 }
 
+const getDate = () => {
+  //display date
+  // Get the current date
+  const currentDate = new Date();
+
+  // Format the date as "dd/mm/yyyy"
+  const day = String(currentDate.getDate()).padStart(2, "0");
+  const month = String(currentDate.getMonth() + 1).padStart(2, "0"); // Months are 0-based
+  const year = currentDate.getFullYear();
+
+  // Create the formatted date string
+  const formattedDate = `${day}/${month}/${year}`;
+
+  // Get the day of the week name
+  const options = { weekday: "long" };
+  const dayOfWeek = currentDate.toLocaleDateString("en-US", options);
+
+  // Display the formatted date and day of the week on the webpage
+  const currentDateElement = document.getElementById("currentDate");
+  currentDateElement.textContent = `${dayOfWeek} ${formattedDate}`;
+};
+getDate();
+console.log();
 connectButton.addEventListener("click", connect);

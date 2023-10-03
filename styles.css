@@ -75,13 +75,18 @@ body {
 
 .hero-content h1 {
   margin: 60px 250px 20px 0;
-  color: #333;
-  font-size: 40px;
+  color: #fff;
+  font-size: 36px;
+}
+
+.hero-content h2 {
+  margin-right: 250px;
+  color: #fff;
 }
 
 .hero-content p {
   margin-right: 250px;
-  color: #333;
+  color: #fff;
   font-size: 24px;
   margin-bottom: 30px;
 }
