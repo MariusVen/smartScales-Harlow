@@ -77,11 +77,13 @@ body {
   margin: 60px 250px 20px 0;
   color: #fff;
   font-size: 36px;
+  text-shadow: 10px 10px 20px #713f1c;
 }
 
 .hero-content h2 {
   margin-right: 250px;
   color: #fff;
+  text-shadow: 10px 10px 20px #713f1c;
 }
 
 .hero-content p {
@@ -89,6 +91,7 @@ body {
   color: #fff;
   font-size: 24px;
   margin-bottom: 30px;
+  text-shadow: 10px 10px 20px #713f1c;
 }
 
 .cta-button {

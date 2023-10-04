@@ -64,7 +64,9 @@ async function readLoop() {
           console.log(numericValue);
           output.textContent = `${numericValue.toFixed(2)} kg\n`;
           // console.log(numericValue.toFixed(2) * 0.5);
-          cashElement.textContent = `£ ${numericValue.toFixed(2) * 0.5}`;
+          cashElement.textContent = `£ ${
+            Math.round(numericValue.toFixed(2) * 0.5 * 100) / 100
+          }`;
 
           // Clear the partial data since we have successfully extracted a valid value
           partialData = "";
