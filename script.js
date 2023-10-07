@@ -64,9 +64,9 @@ async function readLoop() {
           output.innerHTML = `<strong>Weight</strong> ${numericValue.toFixed(
             2
           )} kg\n`;
-          cashElement.textContent = `£ ${
-            Math.round(numericValue.toFixed(2) * 0.5 * 100) / 100
-          }`;
+          cashElement.textContent = `£ ${(
+            Math.round(numericValue * 0.5 * 100) / 100
+          ).toFixed(2)}`;
 
           // Reset the data timeout
           clearTimeout(dataTimeout);
