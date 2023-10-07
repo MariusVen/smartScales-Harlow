@@ -30,7 +30,7 @@ function resetOutput() {
 async function readLoop() {
   resetOutput(); // Initialize the output to "Scale connected but off. Please power it on"
 
-  let partialData = "";
+  let partialData = ""; // Initialize a variable to accumulate partial data
   while (port.readable) {
     const reader = port.readable.getReader();
     try {
@@ -54,14 +54,16 @@ async function readLoop() {
 
         if (match) {
           const numericValue = parseFloat(match[0].replace(/\s+/g, ""));
-          output.textContent = `${numericValue.toFixed(2)} kg\n`;
+          output.innerHTML = `<strong>Weight</strong> ${numericValue.toFixed(
+            2
+          )} kg\n`;
           cashElement.textContent = `£ ${
             Math.round(numericValue.toFixed(2) * 0.5 * 100) / 100
           }`;
 
           // Reset the data timeout
           clearTimeout(dataTimeout);
-          dataTimeout = setTimeout(resetOutput, 3000); // Reset to "Scale connected but off. Please power it on" after 3 seconds without data
+          dataTimeout = setTimeout(resetOutput, 2000); // Reset to "Scale connected but off. Please power it on" after 2 seconds without data
 
           // Clear the partial data since we have successfully extracted a valid value
           partialData = "";
