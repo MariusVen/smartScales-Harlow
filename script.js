@@ -1,9 +1,9 @@
 const connectButton = document.getElementById("connectButton");
 const output = document.getElementById("output");
 const cashElement = document.getElementById("cash");
-let dataReceived = false;
-let timeoutID;
 let port;
+
+let dataTimeout;
 
 async function connect() {
   try {
@@ -17,25 +17,20 @@ async function connect() {
       `NetworkError: Failed to execute 'open' on 'SerialPort': Failed to open serial port.`
     ) {
       output.textContent =
-        "Error: Please disconnect, reconnect cable and press connect";
+        "Error: Please disconnect, reconnect the cable, and press connect";
     } else output.textContent = error;
   }
 }
 
-function startTimeout() {
-  clearTimeout(timeoutID);
-  dataReceived = false; // Reset the dataReceived flag
-  timeoutID = setTimeout(() => {
-    if (!dataReceived) {
-      output.textContent =
-        "The Scale is connected, but off. Please turn on scales";
-    }
-  }, 1000); // Adjust the timeout duration as needed (in milliseconds)
+function resetOutput() {
+  output.textContent = "Scale connected but off. Please power it on";
+  cashElement.textContent = "";
 }
 
 async function readLoop() {
-  startTimeout(); // Start the timeout when the connection is established
-  let partialData = ""; // Initialize a variable to accumulate partial data
+  resetOutput(); // Initialize the output to "Scale connected but off. Please power it on"
+
+  let partialData = "";
   while (port.readable) {
     const reader = port.readable.getReader();
     try {
@@ -44,8 +39,6 @@ async function readLoop() {
         if (done) {
           break;
         }
-        dataReceived = true; // Mark data as received
-        clearTimeout(timeoutID); // Reset the timeout
 
         // Convert the received data to a string
         const textDecoder = new TextDecoder("utf-8");
@@ -60,12 +53,15 @@ async function readLoop() {
         const match = combinedData.match(/-?\s*\d+\.\d{2}/);
 
         if (match) {
-          // console.log(match, "match");
-          const numericValue = parseFloat(match[0].replace(/\s+/g, "")); // Remove spaces
+          const numericValue = parseFloat(match[0].replace(/\s+/g, ""));
           output.textContent = `${numericValue.toFixed(2)} kg\n`;
           cashElement.textContent = `£ ${
             Math.round(numericValue.toFixed(2) * 0.5 * 100) / 100
           }`;
+
+          // Reset the data timeout
+          clearTimeout(dataTimeout);
+          dataTimeout = setTimeout(resetOutput, 3000); // Reset to "Scale connected but off. Please power it on" after 3 seconds without data
 
           // Clear the partial data since we have successfully extracted a valid value
           partialData = "";
@@ -77,6 +73,8 @@ async function readLoop() {
     } catch (error) {
       connectButton.hidden = false;
       output.textContent = error;
+      resetOutput(); // Handle disconnection or errors by resetting the output
+      break;
     } finally {
       reader.releaseLock();
     }
