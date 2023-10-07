@@ -1,6 +1,8 @@
 const connectButton = document.getElementById("connectButton");
 const output = document.getElementById("output");
 const cashElement = document.getElementById("cash");
+let dataReceived = false;
+let timeoutID;
 let port;
 
 async function connect() {
@@ -8,13 +10,32 @@ async function connect() {
     port = await navigator.serial.requestPort();
     await port.open({ baudRate: 9600 });
     readLoop();
-    connectButton.disabled = true;
+    connectButton.hidden = true;
   } catch (error) {
-    console.error("Connection error:", error);
+    if (
+      error.toString().trim() ===
+      `NetworkError: Failed to execute 'open' on 'SerialPort': Failed to open serial port.`
+    ) {
+      output.textContent = "Error: Please disconnect & reconnect cable";
+      console.log("invoked?");
+    }
+    console.log(error);
+    // output.textContent = error;
   }
 }
 
+function startTimeout() {
+  clearTimeout(timeoutID);
+  timeoutID = setTimeout(() => {
+    if (!dataReceived) {
+      output.textContent =
+        "The Scale is connected, but off. Please turn on scales";
+    }
+  }, 1000); // Adjust the timeout duration as needed (in milliseconds)
+}
+
 async function readLoop() {
+  startTimeout(); // Start the timeout when the connection is established
   let partialData = ""; // Initialize a variable to accumulate partial data
   while (port.readable) {
     const reader = port.readable.getReader();
@@ -22,6 +43,9 @@ async function readLoop() {
       while (true) {
         const { value, done } = await reader.read();
         if (done) {
+          dataReceived = true; // Mark data as received
+          clearTimeout(timeoutID); // Reset the timeout
+
           break;
         }
 
@@ -38,7 +62,6 @@ async function readLoop() {
 
         if (match) {
           const numericValue = parseFloat(match[0]);
-          console.log(numericValue);
           output.textContent = `${numericValue.toFixed(2)} kg\n`;
           // console.log(numericValue.toFixed(2) * 0.5);
           cashElement.textContent = `£ ${
@@ -53,8 +76,7 @@ async function readLoop() {
         }
       }
     } catch (error) {
-      connectButton.disabled = false;
-
+      connectButton.hidden = false;
       output.textContent = error;
     } finally {
       reader.releaseLock();
