@@ -9,6 +9,9 @@ async function connect() {
   try {
     port = await navigator.serial.requestPort();
     await port.open({ baudRate: 9600 });
+    port.ondisconnect = (event) => {
+      output.textContent = "Scale has been disconnected";
+    };
     readLoop();
     connectButton.hidden = true;
   } catch (error) {
