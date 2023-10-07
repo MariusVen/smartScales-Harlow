@@ -16,16 +16,15 @@ async function connect() {
       error.toString().trim() ===
       `NetworkError: Failed to execute 'open' on 'SerialPort': Failed to open serial port.`
     ) {
-      output.textContent = "Error: Please disconnect & reconnect cable";
-      console.log("invoked?");
-    }
-    console.log(error);
-    // output.textContent = error;
+      output.textContent =
+        "Error: Please disconnect, reconnect cable and press connect";
+    } else output.textContent = error;
   }
 }
 
 function startTimeout() {
   clearTimeout(timeoutID);
+  dataReceived = false; // Reset the dataReceived flag
   timeoutID = setTimeout(() => {
     if (!dataReceived) {
       output.textContent =
@@ -43,11 +42,10 @@ async function readLoop() {
       while (true) {
         const { value, done } = await reader.read();
         if (done) {
-          dataReceived = true; // Mark data as received
-          clearTimeout(timeoutID); // Reset the timeout
-
           break;
         }
+        dataReceived = true; // Mark data as received
+        clearTimeout(timeoutID); // Reset the timeout
 
         // Convert the received data to a string
         const textDecoder = new TextDecoder("utf-8");
@@ -57,13 +55,14 @@ async function readLoop() {
         // Combine the received data with any previously accumulated partial data
         const combinedData = partialData + receivedString;
 
-        // Use a regular expression to extract the numeric value with two decimal places
-        const match = combinedData.match(/(\d+\.\d{2})/);
+        // Use a regular expression to extract the numeric value with two decimal places,
+        // allowing for an optional negative sign and ignoring extra characters and spaces
+        const match = combinedData.match(/-?\s*\d+\.\d{2}/);
 
         if (match) {
-          const numericValue = parseFloat(match[0]);
+          // console.log(match, "match");
+          const numericValue = parseFloat(match[0].replace(/\s+/g, "")); // Remove spaces
           output.textContent = `${numericValue.toFixed(2)} kg\n`;
-          // console.log(numericValue.toFixed(2) * 0.5);
           cashElement.textContent = `£ ${
             Math.round(numericValue.toFixed(2) * 0.5 * 100) / 100
           }`;
@@ -106,5 +105,4 @@ const getDate = () => {
   currentDateElement.textContent = `${dayOfWeek} ${formattedDate}`;
 };
 getDate();
-console.log();
 connectButton.addEventListener("click", connect);
