@@ -3,30 +3,6 @@ const output = document.getElementById("output");
 const cashElement = document.getElementById("cash");
 let port;
 
-async function detectCableDisconnection() {
-  while (true) {
-    if (!port || port.readable === false) {
-      // Cable disconnected or port is closed
-      handleCableDisconnection();
-      return;
-    }
-    await new Promise((resolve) => setTimeout(resolve, 1000)); // Check every second
-  }
-}
-
-function handleCableDisconnection() {
-  // Display a message to the user
-  output.textContent = "Cable disconnected.\n";
-
-  // Clear any data or buffers
-  // Close the port if it's still open
-  if (port && port.readable) {
-    port.close();
-  }
-}
-
-detectCableDisconnection(); // Start monitoring
-
 async function connect() {
   try {
     port = await navigator.serial.requestPort();
@@ -52,6 +28,7 @@ async function readLoop() {
         // Convert the received data to a string
         const textDecoder = new TextDecoder("utf-8");
         const receivedString = textDecoder.decode(value);
+        console.log(receivedString);
 
         // Combine the received data with any previously accumulated partial data
         const combinedData = partialData + receivedString;
@@ -76,7 +53,9 @@ async function readLoop() {
         }
       }
     } catch (error) {
-      console.error("Read error:", error);
+      connectButton.disabled = false;
+
+      output.textContent = error;
     } finally {
       reader.releaseLock();
     }
