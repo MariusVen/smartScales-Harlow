@@ -2,18 +2,20 @@ const connectButton = document.getElementById("connectButton");
 const output = document.getElementById("output");
 const cashElement = document.getElementById("cash");
 let port;
-
+let readLoopActive = true;
 let dataTimeout;
 
 async function connect() {
   try {
+    readLoopActive = true;
     port = await navigator.serial.requestPort();
     await port.open({ baudRate: 9600 });
-    port.ondisconnect = (event) => {
-      output.textContent = "Scale has been disconnected";
-    };
     readLoop();
     connectButton.hidden = true;
+    port.ondisconnect = (event) => {
+      output.textContent = "Scale has been disconnected";
+      connectButton.hidden = false;
+    };
   } catch (error) {
     if (
       error.toString().trim() ===
@@ -26,15 +28,17 @@ async function connect() {
 }
 
 function resetOutput() {
-  output.textContent = "Scale connected but off. Please power it on";
-  cashElement.textContent = "";
+  if (output.textContent !== "Scale has been disconnected") {
+    output.textContent = "Scale connected but off. Please power it on";
+    cashElement.textContent = "";
+  }
 }
 
 async function readLoop() {
   resetOutput(); // Initialize the output to "Scale connected but off. Please power it on"
 
   let partialData = ""; // Initialize a variable to accumulate partial data
-  while (port.readable) {
+  while (port.readable && readLoopActive) {
     const reader = port.readable.getReader();
     try {
       while (true) {
@@ -76,6 +80,7 @@ async function readLoop() {
         }
       }
     } catch (error) {
+      readLoopActive = false; // Set the flag to stop the read loop
       connectButton.hidden = false;
       output.textContent = error;
       resetOutput(); // Handle disconnection or errors by resetting the output
