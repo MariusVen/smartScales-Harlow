@@ -57,7 +57,7 @@ async function readLoop() {
 
         // Use a regular expression to extract the numeric value with two decimal places,
         // allowing for an optional negative sign and ignoring extra characters and spaces
-        const match = combinedData.match(/-?\s*\d+\.\d{2}/);
+        const match = combinedData.match(/-?\s*\d+\.\d{1,2}/);
 
         if (match) {
           const numericValue = parseFloat(match[0].replace(/\s+/g, ""));
