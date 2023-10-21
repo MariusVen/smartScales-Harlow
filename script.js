@@ -91,6 +91,44 @@ async function readLoop() {
   }
 }
 
+// button for fullscreen
+const fullscreenButton = document.getElementById("fullscreenButton");
+const content = document.getElementById("content");
+
+fullscreenButton.addEventListener("click", () => {
+  if (!document.fullscreenElement) {
+    // If not in fullscreen, go fullscreen.
+    if (content.requestFullscreen) {
+      content.requestFullscreen();
+    } else if (content.mozRequestFullScreen) {
+      content.mozRequestFullScreen();
+    } else if (content.webkitRequestFullscreen) {
+      content.webkitRequestFullscreen();
+    } else if (content.msRequestFullscreen) {
+      content.msRequestFullscreen();
+    }
+    fullscreenButton.textContent = "Exit Fullscreen"; // Update button text
+  } else {
+    // If already in fullscreen, exit fullscreen.
+    if (document.exitFullscreen) {
+      document.exitFullscreen();
+    } else if (document.mozCancelFullScreen) {
+      document.mozCancelFullScreen();
+    } else if (document.webkitExitFullscreen) {
+      document.webkitExitFullscreen();
+    } else if (document.msExitFullscreen) {
+      document.msExitFullscreen();
+    }
+    fullscreenButton.textContent = "Enter Fullscreen"; // Update button text
+  }
+});
+
+//reload page button
+const reloadButton = document.getElementById("reloadButton");
+reloadButton.addEventListener("click", () => {
+  location.reload(); // Reload the page
+});
+
 const getDate = () => {
   //display date
   // Get the current date

@@ -160,6 +160,23 @@ footer {
   text-align: center;
   padding: 20px 0;
 }
+.buttons {
+  background-color: orange;
+  color: white;
+  padding: 5px 2px;
+  border: none;
+  cursor: pointer;
+}
+.buttons:active {
+  background-color: grey;
+  border: 1px solid black;
+}
+
+.buttons:hover {
+  background-color: white;
+  color: black;
+  border: 1px solid grey;
+}
 
 #connectButton {
   background-color: orange;
@@ -180,4 +197,8 @@ footer {
 #connectButton:active {
   background-color: grey;
   border: 1px solid black;
+}
+
+#content:fullscreen {
+  background-color: #ffffff; /* Change to a different background color */
 }
