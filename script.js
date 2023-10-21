@@ -65,7 +65,7 @@ async function readLoop() {
             2
           )} kg\n`;
           cashElement.textContent = `£ ${(
-            Math.round(numericValue * 0.5 * 100) / 100
+            Math.round(numericValue * 0.4 * 100) / 100
           ).toFixed(2)}`;
 
           // Reset the data timeout
